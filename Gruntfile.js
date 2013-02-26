@@ -11,6 +11,33 @@ module.exports = function(grunt) {
     grunt.log.write('Blocking finished.');
   });
 
+  //Tasks that log intermediate output
+  grunt.registerTask('log500', function() {
+    var done = this.async();
+    var i = 0;
+    var interval = setInterval(function () {
+      console.log('500', i);
+      i++;
+      if (i > 10) {
+        clearInterval(interval);
+        done();
+      }
+    }, 500);
+  });
+
+  grunt.registerTask('log1000', function() {
+    var done = this.async();
+    var i = 0;
+    var interval = setInterval(function () {
+      console.log('1000', i);
+      i++;
+      if (i > 10) {
+        clearInterval(interval);
+        done();
+      }
+    }, 1000);
+  });
+
   // Project configuration.
   grunt.initConfig({
     parallel: {
@@ -23,6 +50,13 @@ module.exports = function(grunt) {
       },{
         grunt: true,
         args: ['fast']
+      }],
+      longrunning: [{
+        grunt: true,
+        args: ['log500']
+      }, {
+        grunt: true,
+        args: ['log1000']
       }]
     }
   });
